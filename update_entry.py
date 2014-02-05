@@ -5,12 +5,67 @@ Manipulates the current day's programming notebook entry.
 """
 
 from  __future__ import print_function
-import os, datetime, re, argparse, fileinput, subprocess, ConfigParser
+import os, datetime, time, re, argparse, fileinput, subprocess, ConfigParser
 
 NOTES_DIR = None
 today = datetime.date.today()
 entrytime = today.strftime("%Y-%m-%d")
 filename = ""
+
+
+def find_tasks_to_remind():
+    """Processes the programming notebook directory, looking for tasks set to be reminded of today."""
+    
+    os.chdir(NOTES_DIR)
+    files = os.popen('grep -El "[^\\s]remind\\(.*?\\)" *.{md,txt,taskpaper,ft,doentry} 2>/dev/null').read().strip()
+
+    tasks_to_remind = []
+    
+    # Iterate over matched files
+    for file in files.split("\n"):
+        tasks_to_remind = tasks_to_remind + find_tasks_to_remind_file(file)
+
+    return tasks_to_remind
+
+def find_tasks_to_remind_file(file):
+    """Finds tasks in an individual file marked to be reminded of today or in the past."""
+
+    done_re = re.compile(r"\s@(done|cancell?ed)")
+    reminder_re = re.compile(r"([^\s\"`'\(\[])remind\((.*)(\s\"(.*?)\")?\)")
+
+    # Store access and modification times so we can preserve them
+    mod_times = (os.path.getatime(file), os.path.getmtime(file))
+    current_time_string = time.strftime("%Y-%m-%d")
+
+    tasks_to_remind = []
+
+    # For each matched file, open, and iterate over lines
+    for line in fileinput.input(file, inplace=1):
+        done = done_re.search(line)
+        date_match = reminder_re.search(line)
+
+        # Tagged with a reminder and not marked done?
+        if (date_match and not done):
+            try:
+                remind_date_epoch = time.mktime(time.strptime(date_match.groups()[1], "%Y-%m-%d"))
+            except ValueError:
+                print(line, end="")
+                continue
+
+            # Is it timely?  If yes, then remind!
+            if (remind_date_epoch <= time.time()):
+                stripped_line = (line[:date_match.start()] + line[date_match.end():]).strip()
+                tasks_to_remind.append(stripped_line + " @from(" + os.path.splitext(file)[0] + ")")
+
+                # @remind(..) -> @reminded(..) in original file
+                line = line[:date_match.start()] + "@reminded(" + current_time_string + ")" + line[date_match.end():]
+
+        print(line, end="")
+
+    # Preserve original timestamp
+    os.utime(file, mod_times)
+
+    return tasks_to_remind
 
 def find_previous_entry(date):
     """Find the first entry previous to the given date."""
@@ -53,8 +108,7 @@ def find_tasks_to_shift(date):
             if line != "":
                 tasks.append(line)
 
-    # Iterate over tasks and fine undated and incomplete tasks to shift
-    # TODO: Share with reminders.py somehow
+    # Iterate over tasks and fine undated and incomplete tasks to shift    
     done_re = re.compile(r"\s@(done|cancell?ed)")
     reminder_re = re.compile(r"([^\s\"`'\(\[])remind(ed)?\((.*)(\s\"(.*?)\")?\)")
 
@@ -77,9 +131,9 @@ def create_entry():
         logfile.write("Title: " + today.strftime("%b %d, %Y") + "\n");
         logfile.write("Date: " + entrytime + "\n");
         logfile.write("Tags:\n\n## Notes\n\n\n\n## Tasks.todo\n\n")
-        
-        # Get unfinished and undated tasks from previous entry
-        logfile.write("\n".join(find_tasks_to_shift(today)))
+
+        # Find entries scheduled for reminding, and tasks to shift from previous entry
+        logfile.write("\n".join(find_tasks_to_remind() + find_tasks_to_shift(today)))
         logfile.write("\n\n## Log\n\n");
 
 
