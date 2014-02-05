@@ -103,12 +103,7 @@
 				<key>escaping</key>
 				<integer>126</integer>
 				<key>script</key>
-				<string>NOTEBOOK_DIR=~/Dropbox/programming_notebook
-TODAY=$(date +"%Y-%m-%d")
-FILE=$NOTEBOOK_DIR/$TODAY.md
-
-python update_entry.py	
-open -a /Applications/nvALT.app $FILE</string>
+				<string>python update_entry.py | xargs open -a /Applications/nvALT.app </string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -236,19 +231,6 @@ open -a /Applications/nvALT.app $FILE</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>openwith</key>
-				<string>/Applications/FoldingText.app</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.openfile</string>
-			<key>uid</key>
-			<string>1B26721C-9055-4044-9B5E-E7C3A46E0541</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>anchorfields</key>
 				<true/>
 				<key>daterange</key>
@@ -311,6 +293,19 @@ open -a /Applications/nvALT.app $FILE</string>
 			<string>alfred.workflow.input.filefilter</string>
 			<key>uid</key>
 			<string>E6BB57C1-89F2-47BF-8B99-0799735923C7</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>openwith</key>
+				<string>/Applications/FoldingText.app</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openfile</string>
+			<key>uid</key>
+			<string>1B26721C-9055-4044-9B5E-E7C3A46E0541</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
