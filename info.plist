@@ -28,6 +28,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>BEED1F35-A08F-4632-9216-DB1831A6E386</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>AEF5E400-B210-4A93-A08F-D7B27F88B270</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>CEEC26B0-833A-43DC-9CEA-8A88C62713EB</key>
 		<array>
 			<dict>
@@ -75,6 +86,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>escaping</key>
+				<integer>126</integer>
+				<key>script</key>
+				<string>python update_entry.py | xargs open -a /Applications/nvALT.app </string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>16039760-F173-4AB8-9C73-DA7401D5DE23</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>action</key>
 				<integer>0</integer>
 				<key>argument</key>
@@ -94,23 +122,6 @@
 			<string>alfred.workflow.trigger.hotkey</string>
 			<key>uid</key>
 			<string>CEEC26B0-833A-43DC-9CEA-8A88C62713EB</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>126</integer>
-				<key>script</key>
-				<string>python update_entry.py | xargs open -a /Applications/nvALT.app </string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>16039760-F173-4AB8-9C73-DA7401D5DE23</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -155,6 +166,23 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>python update_entry.py --log "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1D01B7AF-E0A4-439C-AF46-CFB4DEEC3F1A</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>keyword</key>
@@ -170,23 +198,6 @@
 			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
 			<string>D436BB7A-40F4-4C85-81D1-D6F9101E84A0</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>python update_entry.py --log "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>1D01B7AF-E0A4-439C-AF46-CFB4DEEC3F1A</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -309,6 +320,44 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>python update_entry.py -s</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>AEF5E400-B210-4A93-A08F-D7B27F88B270</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>sort</string>
+				<key>subtext</key>
+				<string>Sort tasks</string>
+				<key>text</key>
+				<string>Programming notebook</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>BEED1F35-A08F-4632-9216-DB1831A6E386</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
@@ -339,10 +388,20 @@
 			<key>ypos</key>
 			<real>140</real>
 		</dict>
+		<key>AEF5E400-B210-4A93-A08F-D7B27F88B270</key>
+		<dict>
+			<key>ypos</key>
+			<real>620</real>
+		</dict>
 		<key>B7125D25-229D-4CC1-9604-EC9ED8EB17C9</key>
 		<dict>
 			<key>ypos</key>
 			<real>380</real>
+		</dict>
+		<key>BEED1F35-A08F-4632-9216-DB1831A6E386</key>
+		<dict>
+			<key>ypos</key>
+			<real>620</real>
 		</dict>
 		<key>CEEC26B0-833A-43DC-9CEA-8A88C62713EB</key>
 		<dict>

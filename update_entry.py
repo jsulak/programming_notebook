@@ -14,13 +14,16 @@ filename = ""
 
 
 def find_tasks_to_remind():
-    """Processes the programming notebook directory, looking for tasks set to be reminded of today."""
-    
+    """Processes the programming notebook directory, looking for tasks set to be reminded of today.
+
+    Returns a list of tasks ready to be inserted into a notebook entry.
+    """
+
     os.chdir(NOTES_DIR)
     files = os.popen('grep -El "[^\\s]remind\\(.*?\\)" *.{md,txt,taskpaper,ft,doentry} 2>/dev/null').read().strip()
 
     tasks_to_remind = []
-    
+
     # Iterate over matched files
     for file in files.split("\n"):
         tasks_to_remind = tasks_to_remind + find_tasks_to_remind_file(file)
@@ -28,7 +31,10 @@ def find_tasks_to_remind():
     return tasks_to_remind
 
 def find_tasks_to_remind_file(file):
-    """Finds tasks in an individual file marked to be reminded of today or in the past."""
+    """Finds tasks in an individual file marked to be reminded of today or in the past.
+
+    Returns a list of tasks ready to be inserted into a notebook entry.
+    """
 
     done_re = re.compile(r"\s@(done|cancell?ed)")
     reminder_re = re.compile(r"([^\s\"`'\(\[])remind\((.*)(\s\"(.*?)\")?\)")
@@ -74,10 +80,10 @@ def find_previous_entry(date):
     year = today.timetuple().tm_year
 
     # Search backwards for the previous entry
-    for day in range(day_of_year - 1, 0, -1):
+    for day in xrange(day_of_year - 1, 0, -1):
         past_day = datetime.datetime(year, 1, 1) + datetime.timedelta(day - 1)
         past_day_filename = past_day.strftime("%Y-%m-%d") + ".md"
-        
+
         if os.path.isfile(os.path.join(NOTES_DIR, past_day_filename)):
             return past_day_filename
 
@@ -97,8 +103,8 @@ def find_tasks_to_shift(date):
     # Find all tasks and put in list
     task_section = False
     tasks = []
-    
-    for line in fileinput.input(os.path.join(NOTES_DIR, previous_entry)):        
+
+    for line in fileinput.input(os.path.join(NOTES_DIR, previous_entry)):
         if "## Tasks.todo" in line:
             task_section = True
         elif line.startswith("##"):
@@ -108,7 +114,7 @@ def find_tasks_to_shift(date):
             if line != "":
                 tasks.append(line)
 
-    # Iterate over tasks and fine undated and incomplete tasks to shift    
+    # Iterate over tasks and fine undated and incomplete tasks to shift
     done_re = re.compile(r"\s@(done|cancell?ed)")
     reminder_re = re.compile(r"([^\s\"`'\(\[])remind(ed)?\((.*)(\s\"(.*?)\")?\)")
 
@@ -124,9 +130,52 @@ def find_tasks_to_shift(date):
     return tasks_to_shift
 
 
+def sort_tasks():
+    """Sorts the tasks in today's entry, moving completed tasks to the bottom of the list."""
+
+    done_re = re.compile(r"\s@(done|cancell?ed)")
+    reminder_re = re.compile(r"([^\s\"`'\(\[])remind\((.*)(\s\"(.*?)\")?\)")
+
+    task_section = False
+    pending_tasks = []
+    reminding_tasks = []
+    done_tasks = []
+
+    for line in fileinput.input(filename, inplace=1):
+        if "## Tasks.todo" in line:
+            task_section = True
+            print(line)
+        elif task_section:
+            if line.startswith("##"):
+                # If we've hit the log, then spew everything out
+                task_section = False
+                # Print out all pending and done tasks
+                for task in pending_tasks:
+                    print(task, end="")
+                for task in reminding_tasks:
+                    print(task, end="")
+                for task in done_tasks:
+                    print(task, end="")
+
+                print("\n" + line, end="")
+
+            else:
+                # Otherwise, accumulate the tasks, but don't print yet
+                if line.strip() == "":
+                    continue
+                if done_re.search(line):
+                    done_tasks.append(line)
+                elif reminder_re.search(line):
+                    reminding_tasks.append(line)
+                else:
+                    pending_tasks.append(line)
+        else:
+            print(line, end="")
+
+
 def create_entry():
     """Create a new programming notebook entry for today."""
-    
+
     with open(filename, "w") as logfile:
         logfile.write("Title: " + today.strftime("%b %d, %Y") + "\n");
         logfile.write("Date: " + entrytime + "\n");
@@ -163,7 +212,7 @@ def add_log(entry):
 
 def add_task(task):
     task_section = False
-    for line in fileinput.input(filename, inplace=1):        
+    for line in fileinput.input(filename, inplace=1):
         if "## Tasks.todo" in line:
             task_section = True
             print(line, end="")
@@ -174,7 +223,7 @@ def add_task(task):
         else:
             print(line, end="")
 
-            
+
 if __name__ == "__main__":
     config = ConfigParser.ConfigParser()
     config.read("config.ini")
@@ -187,19 +236,21 @@ if __name__ == "__main__":
     parser.add_argument('-t', '--tag', dest='tag', type=str)
     parser.add_argument('-l', '--log', dest='log', type=str)
     parser.add_argument('--task', dest='task', type=str)
+    parser.add_argument('-s', '--sort', dest='sort_tasks', action='store_true', default=False)
     args = parser.parse_args()
 
     filename = os.path.join(NOTES_DIR, entrytime + ".md")
     print(filename)
 
-    # Before we operate on the file, create the entry if it doesn't     
+    # Before we operate on the file, create the entry if it doesn't
     if not os.path.isfile(filename):
         create_entry()
-    
+
     if (args.tag):
         add_tag(args.tag)
     if (args.log):
         add_log(args.log)
     if (args.task):
         add_task(args.task)
-    
+    if (args.sort_tasks):
+        sort_tasks()
