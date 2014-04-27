@@ -17,6 +17,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>33080BD5-E2A0-4963-BAF1-07F3AC617E7F</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>56783A00-783A-4615-9924-F90E80046276</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 		<key>B7125D25-229D-4CC1-9604-EC9ED8EB17C9</key>
 		<array>
 			<dict>
@@ -358,6 +369,44 @@
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>today</string>
+				<key>subtext</key>
+				<string>Open today's entry</string>
+				<key>text</key>
+				<string>Programming notebook</string>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>33080BD5-E2A0-4963-BAF1-07F3AC617E7F</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>126</integer>
+				<key>script</key>
+				<string>python update_entry.py | xargs open -a /Applications/FoldingText.app </string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>56783A00-783A-4615-9924-F90E80046276</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string></string>
@@ -387,6 +436,16 @@
 		<dict>
 			<key>ypos</key>
 			<real>140</real>
+		</dict>
+		<key>33080BD5-E2A0-4963-BAF1-07F3AC617E7F</key>
+		<dict>
+			<key>ypos</key>
+			<real>740</real>
+		</dict>
+		<key>56783A00-783A-4615-9924-F90E80046276</key>
+		<dict>
+			<key>ypos</key>
+			<real>740</real>
 		</dict>
 		<key>AEF5E400-B210-4A93-A08F-D7B27F88B270</key>
 		<dict>

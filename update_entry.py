@@ -223,6 +223,17 @@ def add_task(task):
         else:
             print(line, end="")
 
+def process_inbox():
+    """Processes and deletes the task inbox."""
+    
+    inbox = os.path.join(NOTES_DIR, "inbox.txt")
+    if not os.path.isfile(inbox):
+        return
+    for line in open(inbox):
+        task = line.strip()
+        if task != "": add_task(task)
+    os.remove(inbox)
+
 
 if __name__ == "__main__":
     config = ConfigParser.ConfigParser()
@@ -245,6 +256,9 @@ if __name__ == "__main__":
     # Before we operate on the file, create the entry if it doesn't
     if not os.path.isfile(filename):
         create_entry()
+
+    # Let's grab anything we need from the task inbox
+    process_inbox()
 
     if (args.tag):
         add_tag(args.tag)
